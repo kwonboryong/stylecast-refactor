@@ -93,29 +93,11 @@ function LoginPage() {
   };
 
   useEffect(() => {
-    const checkLoginStatus = () => {
-      try {
-        const sessionAuth = sessionStorage.getItem('pb_auth');
-        const localAuth = localStorage.getItem('pb_auth');
+    const token = getAuthToken();
 
-        const authData = sessionAuth || localAuth; // 세션 스토리지가 우선, 없으면 로컬 스토리지
-        if (authData) {
-          const parsedAuth = JSON.parse(authData);
-          if (parsedAuth && parsedAuth.token) {
-            // 유저가 로그인되어 있으면 2초 후 메인 페이지로 리다이렉트
-            dispatch({ type: 'SET_REDIRECTING', payload: true });
-
-            setTimeout(() => {
-              navigate('/main');
-            }, 2000);
-          }
-        }
-      } catch (error) {
-        console.error('로그인 상태 확인 실패:', error);
-      }
-    };
-
-    checkLoginStatus();
+    if (token) {
+      navigate('/main', { replace: true });
+    }
   }, [navigate]);
 
   return (
