@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { Input, Button, Form } from '@/components';
 import pb from './../api/pocketbase';
 import { Helmet } from 'react-helmet-async';
@@ -7,6 +7,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { validatePassword, validateEmail } from './../api/validation';
 import useUserStore from '@/stores/userStore';
 import { useLoginForm } from './../hooks/useLoginForm';
+import { getAuthToken } from '@/utils/getAuth';
 
 pb.authStore.save = (model, token) => {
   const authData = { model, token };
@@ -18,13 +19,19 @@ pb.authStore.save = (model, token) => {
 function LoginPage() {
   const [state, dispatch] = useLoginForm();
 
-  const handleEmailChange = (e) => {
-    dispatch({ type: 'SET_EMAIL', payload: e.target.value });
-  };
+  const handleEmailChange = useCallback(
+    (e) => {
+      dispatch({ type: 'SET_EMAIL', payload: e.target.value });
+    },
+    [dispatch]
+  );
 
-  const handlePasswordChange = (e) => {
-    dispatch({ type: 'SET_PASSWORD', payload: e.target.value });
-  };
+  const handlePasswordChange = useCallback(
+    (e) => {
+      dispatch({ type: 'SET_PASSWORD', payload: e.target.value });
+    },
+    [dispatch]
+  );
 
   const { login } = useUserStore();
 
@@ -34,6 +41,7 @@ function LoginPage() {
 
   const handleBlur = (e) => {
     const { name, value } = e.target;
+
     if (name === 'email' && !validateEmail(value)) {
       dispatch({ type: 'SET_WARNING', payload: { email: '유효한 이메일 주소를 입력하세요.' } });
     } else if (name === 'password' && !validatePassword(value)) {
@@ -50,12 +58,14 @@ function LoginPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     if (!state.email) {
       emailRef.current.focus();
 
       dispatch({ type: 'SET_WARNING', payload: { email: '이메일을 입력하세요.' } });
       return;
     }
+
     if (!state.password) {
       passwordRef.current.focus();
 
