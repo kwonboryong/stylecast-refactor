@@ -140,59 +140,48 @@ function LoginPage() {
             나에게 맞는 맞춤 추천을 받으세요.
           </p>
         </div>
-        {state.redirecting && (
-          <div className={styles.redirecting}>
-            <div className={styles.pop}>
-              <p>
-                😮 오! 이미 로그인 되어있어요.
-                <br />
-                메인페이지로 이동할게요.
-              </p>
-            </div>
+
+        <Form onSubmit={handleLogin} aria-busy={state.isSubmitting} className={styles.loginForm}>
+          <Input
+            text="이메일"
+            description="이메일을 입력하세요"
+            name="email"
+            value={state.email}
+            inputRef={emailRef}
+            onChange={handleEmailChange}
+            onBlur={handleBlur}
+            warningText={state.warnings.email || state.warnings.auth}
+          />
+          <Input
+            text="비밀번호"
+            description="비밀번호를 입력하세요"
+            name="password"
+            type={state.showPassword ? 'text' : 'password'}
+            value={state.password}
+            inputRef={passwordRef}
+            onChange={handlePasswordChange}
+            onBlur={handleBlur}
+            warningText={state.warnings.password || state.warnings.auth}
+          />
+          <div className={styles.showPasswordWrap}>
+            <input
+              type="checkbox"
+              id="showPassword"
+              checked={state.showPassword}
+              onChange={toggleShowPassword}
+            />
+            <label htmlFor="showPassword">비밀번호 보기</label>
           </div>
-        )}
-        {!state.redirecting && (
-          <Form onSubmit={handleLogin} aria-busy={state.isSubmitting} className={styles.loginForm}>
-            <Input
-              text="이메일"
-              description="이메일을 입력하세요"
-              name="email"
-              value={state.email}
-              inputRef={emailRef}
-              onChange={handleEmailChange}
-              onBlur={handleBlur}
-              warningText={state.warnings.email || state.warnings.auth}
+          <div className={styles.buttonArea}>
+            <Button
+              type="submit"
+              text={state.isSubmitting ? '로그인 진행 중' : '로그인'}
+              disabled={state.isSubmitting}
+              active={!state.isSubmitting}
             />
-            <Input
-              text="비밀번호"
-              description="비밀번호를 입력하세요"
-              name="password"
-              type={state.showPassword ? 'text' : 'password'}
-              value={state.password}
-              inputRef={passwordRef}
-              onChange={handlePasswordChange}
-              onBlur={handleBlur}
-              warningText={state.warnings.password || state.warnings.auth}
-            />
-            <div className={styles.showPasswordWrap}>
-              <input
-                type="checkbox"
-                id="showPassword"
-                checked={state.showPassword}
-                onChange={toggleShowPassword}
-              />
-              <label htmlFor="showPassword">비밀번호 보기</label>
-            </div>
-            <div className={styles.buttonArea}>
-              <Button
-                type="submit"
-                text={state.isSubmitting ? '로그인 진행 중' : '로그인'}
-                disabled={state.isSubmitting}
-                active={!state.isSubmitting}
-              />
-            </div>
-          </Form>
-        )}
+          </div>
+        </Form>
+
         <div className={styles.joinGroup}>
           <NavLink to="/findpassword">비밀번호 찾기</NavLink>
           <span aria-hidden="true" className={styles.distinguished}>
