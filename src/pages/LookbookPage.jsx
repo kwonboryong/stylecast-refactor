@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
-import { IoRefreshSharp } from 'react-icons/io5';
+
 import { useNavigate, Outlet, useLocation, NavLink } from 'react-router-dom';
 import { A11y, Keyboard, Pagination, Scrollbar } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -9,11 +9,12 @@ import 'swiper/scss';
 import 'swiper/scss/pagination';
 import getPbImageURL from './../api/getPbImageURL';
 import pb from './../api/pocketbase';
-import Button from './../components/Button/Button';
+
 import styles from './../styles/pages/Lookbookpage.module.scss';
 import { getWeatherIcon } from './../utils/weatherIcons';
 import { getSeason } from './../data/constant';
 import { WeatherIcon } from './../components/LookBook/WeatherIcon';
+import { RefreshButton } from './../components/LookBook/RefreshButton';
 
 function LookbookPage() {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ function LookbookPage() {
   const [lookBookItems, setLookBookItems] = useState([]);
 
   // 현재 착용샷
-  const [currentSeasonItems, setCurrentSeasonItems] = useState([]);
+  const [, setCurrentSeasonItems] = useState([]);
 
   // 현재 경로 저장
   // - 룩북p / 룩북 상세p 구분을 위함
@@ -186,20 +187,7 @@ function LookbookPage() {
         <div className={styles.topWrapper}>
           <h2 className={styles.title}>Look Book : OOTD</h2>
 
-          <div className={styles.refreshBtn}>
-            <Button
-              icon={<IoRefreshSharp />}
-              active={true}
-              onClick={handleRefresh}
-              style={{
-                backgroundColor: 'transparent',
-                border: 'none',
-                width: '31px',
-                height: '31px',
-                marginLeft: '-4px',
-              }}
-            />
-          </div>
+          <RefreshButton onRefresh={handleRefresh} />
         </div>
 
         <WeatherIcon weatherIcon={weatherIcon} />
