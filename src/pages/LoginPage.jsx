@@ -59,6 +59,8 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    if (state.isSubmitting) return;
+
     if (!state.email) {
       emailRef.current.focus();
 
@@ -74,15 +76,19 @@ function LoginPage() {
     }
 
     try {
+      dispatch({ type: 'SET_SUBMITTING', payload: true });
+
       const result = await login(state.email, state.password);
 
       if (result.success) {
-        navigate('/main');
+        navigate('/main', { replace: true });
       }
     } catch (error) {
       console.error('로그인 실패:', error);
 
       dispatch({ type: 'SET_WARNING', payload: { auth: '이메일 또는 비밀번호를 확인해주세요.' } });
+    } finally {
+      dispatch({ type: 'SET_SUBMITTING', payload: false });
     }
   };
 
@@ -146,7 +152,7 @@ function LoginPage() {
           </div>
         )}
         {!state.redirecting && (
-          <Form onSubmit={handleLogin} className={styles.loginForm}>
+          <Form onSubmit={handleLogin} aria-busy={state.isSubmitting} className={styles.loginForm}>
             <Input
               text="이메일"
               description="이메일을 입력하세요"
@@ -178,7 +184,12 @@ function LoginPage() {
               <label htmlFor="showPassword">비밀번호 보기</label>
             </div>
             <div className={styles.buttonArea}>
-              <Button type="submit" text="로그인" active={true} />
+              <Button
+                type="submit"
+                text={state.isSubmitting ? '로그인 진행 중' : '로그인'}
+                disabled={state.isSubmitting}
+                active={!state.isSubmitting}
+              />
             </div>
           </Form>
         )}
