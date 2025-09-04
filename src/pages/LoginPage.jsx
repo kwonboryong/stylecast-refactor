@@ -7,7 +7,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { validatePassword, validateEmail } from './../api/validation';
 import useUserStore from '@/stores/userStore';
 import { useLoginForm } from './../hooks/useLoginForm';
-import { getAuthToken } from '@/utils/getAuth';
+import { getAuthToken } from '@/utils/getAuthToken';
 
 pb.authStore.save = (model, token) => {
   const authData = { model, token };
@@ -17,6 +17,12 @@ pb.authStore.save = (model, token) => {
 };
 
 function LoginPage() {
+  const { login } = useUserStore();
+
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const navigate = useNavigate();
+
   const [state, dispatch] = useLoginForm();
 
   const handleEmailChange = useCallback(
@@ -32,12 +38,6 @@ function LoginPage() {
     },
     [dispatch]
   );
-
-  const { login } = useUserStore();
-
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
-  const navigate = useNavigate();
 
   const handleBlur = (e) => {
     const { name, value } = e.target;
