@@ -13,6 +13,7 @@ import Button from './../components/Button/Button';
 import styles from './../styles/pages/Lookbookpage.module.scss';
 import { getWeatherIcon } from './../utils/weatherIcons';
 import { getSeason } from './../data/constant';
+import { WeatherIcon } from './../components/LookBook/WeatherIcon';
 
 function LookbookPage() {
   const navigate = useNavigate();
@@ -201,9 +202,7 @@ function LookbookPage() {
           </div>
         </div>
 
-        <div className={styles.weatherIcon}>
-          <img src={weatherIcon.src} alt={weatherIcon.alt} />
-        </div>
+        <WeatherIcon weatherIcon={weatherIcon} />
 
         <div className={styles.subTitle}>
           <p className={styles.description}>
