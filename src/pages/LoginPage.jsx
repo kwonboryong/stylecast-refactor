@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { Input, Button, Form } from '@/components';
 import pb from './../api/pocketbase';
 import { Helmet } from 'react-helmet-async';
@@ -6,6 +6,7 @@ import styles from '@/styles/pages/Login.module.scss';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { validatePassword, validateEmail } from './../api/validation';
 import useUserStore from '@/stores/userStore';
+import { useLoginForm } from './../hooks/useLoginForm';
 
 pb.authStore.save = (model, token) => {
   const authData = { model, token };
@@ -15,70 +16,70 @@ pb.authStore.save = (model, token) => {
 };
 
 function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [warnings, setWarnings] = useState({ email: '', password: '', auth: '' });
-  const [redirecting, setRedirecting] = useState(false);
+  const [state, dispatch] = useLoginForm();
+
+  const handleEmailChange = (e) => {
+    dispatch({ type: 'SET_EMAIL', payload: e.target.value });
+  };
+
+  const handlePasswordChange = (e) => {
+    dispatch({ type: 'SET_PASSWORD', payload: e.target.value });
+  };
+
   const { login } = useUserStore();
 
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const navigate = useNavigate();
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
   const handleBlur = (e) => {
     const { name, value } = e.target;
     if (name === 'email' && !validateEmail(value)) {
-      setWarnings((prev) => ({ ...prev, email: '유효한 이메일 주소를 입력하세요.' }));
+      dispatch({ type: 'SET_WARNING', payload: { email: '유효한 이메일 주소를 입력하세요.' } });
     } else if (name === 'password' && !validatePassword(value)) {
-      setWarnings((prev) => ({
-        ...prev,
-        password: '비밀번호는 영문자, 숫자, 특수문자를 포함하여 최소 8자 이상 입력해야 합니다.',
-      }));
+      dispatch({
+        type: 'SET_WARNING',
+        payload: {
+          password: '비밀번호는 영문자, 숫자, 특수문자를 포함하여 최소 8자 이상 입력해야 합니다.',
+        },
+      });
     } else {
-      setWarnings((prev) => ({ ...prev, [name]: '' }));
+      dispatch({ type: 'SET_WARNING', payload: { [name]: '' } });
     }
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (!email) {
+    if (!state.email) {
       emailRef.current.focus();
-      setWarnings((prev) => ({ ...prev, email: '이메일을 입력하세요.' }));
+
+      dispatch({ type: 'SET_WARNING', payload: { email: '이메일을 입력하세요.' } });
       return;
     }
-    if (!password) {
+    if (!state.password) {
       passwordRef.current.focus();
-      setWarnings((prev) => ({ ...prev, password: '비밀번호를 입력하세요.' }));
+
+      dispatch({ type: 'SET_WARNING', payload: { password: '비밀번호를 입력하세요.' } });
       return;
     }
 
     try {
-      const result = await login(email, password);
+      const result = await login(state.email, state.password);
 
       if (result.success) {
-        // Navigate to the main page upon successful login
         navigate('/main');
       }
     } catch (error) {
       console.error('로그인 실패:', error);
-      setWarnings((prev) => ({
-        ...prev,
-        auth: '이메일 또는 비밀번호를 확인해주세요.',
-      }));
+
+      dispatch({ type: 'SET_WARNING', payload: { auth: '이메일 또는 비밀번호를 확인해주세요.' } });
     }
   };
 
   const toggleShowPassword = () => {
-    setShowPassword((prevState) => !prevState);
+    dispatch({
+      type: 'TOGGLE_PASSWORD',
+    });
   };
 
   useEffect(() => {
@@ -92,7 +93,8 @@ function LoginPage() {
           const parsedAuth = JSON.parse(authData);
           if (parsedAuth && parsedAuth.token) {
             // 유저가 로그인되어 있으면 2초 후 메인 페이지로 리다이렉트
-            setRedirecting(true);
+            dispatch({ type: 'SET_REDIRECTING', payload: true });
+
             setTimeout(() => {
               navigate('/main');
             }, 2000);
@@ -114,7 +116,10 @@ function LoginPage() {
         <meta property="twitter:title" content="로그인 | StyleCast - 나만의 스타일 캐스트" />
         <meta name="description" content="날씨에 따른 옷차림을 추천해주는 StyleCast" />
         <meta property="og:description" content="날씨에 따른 옷차림을 추천해주는 StyleCast" />
-        <meta name="keywords" content="날씨, 기온, 옷차림, 뭐입지, 입을옷, 의류, 기상정보, 룩북, 체형, 퍼스널컬러" />
+        <meta
+          name="keywords"
+          content="날씨, 기온, 옷차림, 뭐입지, 입을옷, 의류, 기상정보, 룩북, 체형, 퍼스널컬러"
+        />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://stylecast.netlify.app/image/og-sc.png" />
         <meta property="og:url" content="https://stylecast.netlify.app/" />
@@ -137,7 +142,7 @@ function LoginPage() {
             나에게 맞는 맞춤 추천을 받으세요.
           </p>
         </div>
-        {redirecting && (
+        {state.redirecting && (
           <div className={styles.redirecting}>
             <div className={styles.pop}>
               <p>
@@ -148,34 +153,34 @@ function LoginPage() {
             </div>
           </div>
         )}
-        {!redirecting && (
+        {!state.redirecting && (
           <Form onSubmit={handleLogin} className={styles.loginForm}>
             <Input
               text="이메일"
               description="이메일을 입력하세요"
               name="email"
-              value={email}
+              value={state.email}
               inputRef={emailRef}
               onChange={handleEmailChange}
               onBlur={handleBlur}
-              warningText={warnings.email || warnings.auth}
+              warningText={state.warnings.email || state.warnings.auth}
             />
             <Input
               text="비밀번호"
               description="비밀번호를 입력하세요"
               name="password"
-              type={showPassword ? 'text' : 'password'}
-              value={password}
+              type={state.showPassword ? 'text' : 'password'}
+              value={state.password}
               inputRef={passwordRef}
               onChange={handlePasswordChange}
               onBlur={handleBlur}
-              warningText={warnings.password || warnings.auth}
+              warningText={state.warnings.password || state.warnings.auth}
             />
             <div className={styles.showPasswordWrap}>
               <input
                 type="checkbox"
                 id="showPassword"
-                checked={showPassword}
+                checked={state.showPassword}
                 onChange={toggleShowPassword}
               />
               <label htmlFor="showPassword">비밀번호 보기</label>
