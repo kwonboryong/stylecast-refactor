@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { Input, Button, Form } from '@/components';
 import pb from './../api/pocketbase';
 import { Helmet } from 'react-helmet-async';
@@ -7,6 +7,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { validatePassword, validateEmail } from './../api/validation';
 import useUserStore from '@/stores/userStore';
 import { useLoginForm } from './../hooks/useLoginForm';
+import { getAuthToken } from '@/utils/getAuthToken';
 
 pb.authStore.save = (model, token) => {
   const authData = { model, token };
@@ -16,24 +17,31 @@ pb.authStore.save = (model, token) => {
 };
 
 function LoginPage() {
-  const [state, dispatch] = useLoginForm();
-
-  const handleEmailChange = (e) => {
-    dispatch({ type: 'SET_EMAIL', payload: e.target.value });
-  };
-
-  const handlePasswordChange = (e) => {
-    dispatch({ type: 'SET_PASSWORD', payload: e.target.value });
-  };
-
   const { login } = useUserStore();
 
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const navigate = useNavigate();
 
+  const [state, dispatch] = useLoginForm();
+
+  const handleEmailChange = useCallback(
+    (e) => {
+      dispatch({ type: 'SET_EMAIL', payload: e.target.value });
+    },
+    [dispatch]
+  );
+
+  const handlePasswordChange = useCallback(
+    (e) => {
+      dispatch({ type: 'SET_PASSWORD', payload: e.target.value });
+    },
+    [dispatch]
+  );
+
   const handleBlur = (e) => {
     const { name, value } = e.target;
+
     if (name === 'email' && !validateEmail(value)) {
       dispatch({ type: 'SET_WARNING', payload: { email: '유효한 이메일 주소를 입력하세요.' } });
     } else if (name === 'password' && !validatePassword(value)) {
@@ -50,12 +58,16 @@ function LoginPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    if (state.isSubmitting) return;
+
     if (!state.email) {
       emailRef.current.focus();
 
       dispatch({ type: 'SET_WARNING', payload: { email: '이메일을 입력하세요.' } });
       return;
     }
+
     if (!state.password) {
       passwordRef.current.focus();
 
@@ -64,15 +76,19 @@ function LoginPage() {
     }
 
     try {
+      dispatch({ type: 'SET_SUBMITTING', payload: true });
+
       const result = await login(state.email, state.password);
 
       if (result.success) {
-        navigate('/main');
+        navigate('/main', { replace: true });
       }
     } catch (error) {
       console.error('로그인 실패:', error);
 
       dispatch({ type: 'SET_WARNING', payload: { auth: '이메일 또는 비밀번호를 확인해주세요.' } });
+    } finally {
+      dispatch({ type: 'SET_SUBMITTING', payload: false });
     }
   };
 
@@ -83,29 +99,11 @@ function LoginPage() {
   };
 
   useEffect(() => {
-    const checkLoginStatus = () => {
-      try {
-        const sessionAuth = sessionStorage.getItem('pb_auth');
-        const localAuth = localStorage.getItem('pb_auth');
+    const token = getAuthToken();
 
-        const authData = sessionAuth || localAuth; // 세션 스토리지가 우선, 없으면 로컬 스토리지
-        if (authData) {
-          const parsedAuth = JSON.parse(authData);
-          if (parsedAuth && parsedAuth.token) {
-            // 유저가 로그인되어 있으면 2초 후 메인 페이지로 리다이렉트
-            dispatch({ type: 'SET_REDIRECTING', payload: true });
-
-            setTimeout(() => {
-              navigate('/main');
-            }, 2000);
-          }
-        }
-      } catch (error) {
-        console.error('로그인 상태 확인 실패:', error);
-      }
-    };
-
-    checkLoginStatus();
+    if (token) {
+      navigate('/main', { replace: true });
+    }
   }, [navigate]);
 
   return (
@@ -142,54 +140,48 @@ function LoginPage() {
             나에게 맞는 맞춤 추천을 받으세요.
           </p>
         </div>
-        {state.redirecting && (
-          <div className={styles.redirecting}>
-            <div className={styles.pop}>
-              <p>
-                😮 오! 이미 로그인 되어있어요.
-                <br />
-                메인페이지로 이동할게요.
-              </p>
-            </div>
+
+        <Form onSubmit={handleLogin} aria-busy={state.isSubmitting} className={styles.loginForm}>
+          <Input
+            text="이메일"
+            description="이메일을 입력하세요"
+            name="email"
+            value={state.email}
+            inputRef={emailRef}
+            onChange={handleEmailChange}
+            onBlur={handleBlur}
+            warningText={state.warnings.email || state.warnings.auth}
+          />
+          <Input
+            text="비밀번호"
+            description="비밀번호를 입력하세요"
+            name="password"
+            type={state.showPassword ? 'text' : 'password'}
+            value={state.password}
+            inputRef={passwordRef}
+            onChange={handlePasswordChange}
+            onBlur={handleBlur}
+            warningText={state.warnings.password || state.warnings.auth}
+          />
+          <div className={styles.showPasswordWrap}>
+            <input
+              type="checkbox"
+              id="showPassword"
+              checked={state.showPassword}
+              onChange={toggleShowPassword}
+            />
+            <label htmlFor="showPassword">비밀번호 보기</label>
           </div>
-        )}
-        {!state.redirecting && (
-          <Form onSubmit={handleLogin} className={styles.loginForm}>
-            <Input
-              text="이메일"
-              description="이메일을 입력하세요"
-              name="email"
-              value={state.email}
-              inputRef={emailRef}
-              onChange={handleEmailChange}
-              onBlur={handleBlur}
-              warningText={state.warnings.email || state.warnings.auth}
+          <div className={styles.buttonArea}>
+            <Button
+              type="submit"
+              text={state.isSubmitting ? '로그인 진행 중' : '로그인'}
+              disabled={state.isSubmitting}
+              active={!state.isSubmitting}
             />
-            <Input
-              text="비밀번호"
-              description="비밀번호를 입력하세요"
-              name="password"
-              type={state.showPassword ? 'text' : 'password'}
-              value={state.password}
-              inputRef={passwordRef}
-              onChange={handlePasswordChange}
-              onBlur={handleBlur}
-              warningText={state.warnings.password || state.warnings.auth}
-            />
-            <div className={styles.showPasswordWrap}>
-              <input
-                type="checkbox"
-                id="showPassword"
-                checked={state.showPassword}
-                onChange={toggleShowPassword}
-              />
-              <label htmlFor="showPassword">비밀번호 보기</label>
-            </div>
-            <div className={styles.buttonArea}>
-              <Button type="submit" text="로그인" active={true} />
-            </div>
-          </Form>
-        )}
+          </div>
+        </Form>
+
         <div className={styles.joinGroup}>
           <NavLink to="/findpassword">비밀번호 찾기</NavLink>
           <span aria-hidden="true" className={styles.distinguished}>

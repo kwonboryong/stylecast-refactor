@@ -5,7 +5,7 @@ export const initialState = {
   password: '',
   showPassword: false,
   warnings: { email: '', password: '', auth: '' },
-  redirecting: false,
+  isSubmitting: false
 };
 
 export function reducer(state, action) {
@@ -18,8 +18,8 @@ export function reducer(state, action) {
       return { ...state, showPassword: !state.showPassword };
     case 'SET_WARNING':
       return { ...state, warnings: { ...state.warnings, ...action.payload } };
-    case 'SET_REDIRECTING':
-      return { ...state, redirecting: action.payload };
+    case 'SET_SUBMITTING':
+      return { ...state, isSubmitting: action.payload };
     default:
       return state;
   }
