@@ -11,7 +11,7 @@ export { default as IntroPage } from './IntroPage';
 export { default as LikedPage } from './LikedPage';
 export { default as LoginPage } from './LoginPage';
 export { default as LookBookDetailPage } from './LookBookDetailPage';
-export { default as LookbookPage } from './LookbookPage';
+export { default as LookbookPage } from './LookBookPage';
 export { default as MainPage } from './MainPage';
 export { default as MyPage } from './MyPage';
 export { default as RegisterPage } from './RegisterPage';

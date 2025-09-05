@@ -1,0 +1,25 @@
+import styles from './../../styles/pages/LookBookpage.module.scss';
+import Button from './../../components/Button/Button';
+import { IoRefreshSharp } from 'react-icons/io5';
+
+export function RefreshButton({ onRefresh }) {
+  return (
+    <div className={styles.refreshBtn}>
+      <Button
+        type="button"
+        aria-label="추천 코디 새로고침"
+        title="추천 코디 새로고침"
+        icon={<IoRefreshSharp aria-hidden="true" />}
+        active={true}
+        onClick={onRefresh}
+        style={{
+          backgroundColor: 'transparent',
+          border: 'none',
+          width: '31px',
+          height: '31px',
+          marginLeft: '-4px',
+        }}
+      />
+    </div>
+  );
+}
