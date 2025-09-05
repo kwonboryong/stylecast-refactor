@@ -24,7 +24,7 @@ export default function LookBookSwiper({ lookBookItems, handleImageClick, swiper
       ref={swiperRef}
     >
       {lookBookItems.length > 0 ? (
-        lookBookItems.map((item, i) => (
+        lookBookItems.map((item) => (
           <SwiperSlide key={item.id}>
             <NavLink to={`/lookbook/${item.id}`}>
               <img
@@ -32,9 +32,6 @@ export default function LookBookSwiper({ lookBookItems, handleImageClick, swiper
                 alt={item.lookBookTitle}
                 className={styles.outfitImage}
                 onClick={() => handleImageClick(item)}
-                loading={i === 0 ? 'eager' : 'lazy'}
-                fetchPriority={i === 0 ? 'high' : 'auto'}
-                decoding="async"
               />
             </NavLink>
           </SwiperSlide>
