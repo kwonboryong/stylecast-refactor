@@ -1,23 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState, useRef, lazy, Suspense } from 'react';
+import { useNavigate, Outlet, useLocation } from 'react-router-dom';
+import styles from './../styles/pages/LookBookpage.module.scss';
+import pb from '../api/pocketbase';
 import { Helmet } from 'react-helmet-async';
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
+import { getWeatherIcon } from '../utils/weatherIcons';
+import { getSeason } from '../data/constant';
+import { WeatherIcon } from '../components/LookBook/WeatherIcon';
+import { RefreshButton } from '../components/LookBook/RefreshButton';
+import { useRefresh } from '../hooks/useRefresh';
 
-import { useNavigate, Outlet, useLocation, NavLink } from 'react-router-dom';
-import { A11y, Keyboard, Pagination, Scrollbar } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/scss';
-import 'swiper/scss/pagination';
-import getPbImageURL from './../api/getPbImageURL';
-import pb from './../api/pocketbase';
+const LookBookSwiper = lazy(() => import('@/components/LookBook/LookBookSwiper'));
 
-import styles from './../styles/pages/Lookbookpage.module.scss';
-import { getWeatherIcon } from './../utils/weatherIcons';
-import { getSeason } from './../data/constant';
-import { WeatherIcon } from './../components/LookBook/WeatherIcon';
-import { RefreshButton } from './../components/LookBook/RefreshButton';
-import { useRefresh } from './../hooks/useRefresh';
-
-function LookbookPage() {
+function LookBookPage() {
   const navigate = useNavigate();
   const swiperRef = useRef(null);
 
@@ -107,7 +102,15 @@ function LookbookPage() {
     fetchLookBookItems();
   }, [season]);
 
-  // 스와이퍼 네비게이션 버튼 -----------------------
+  // 새로고침
+  const { handleRefresh } = useRefresh(lookBookItems, setLookBookItems, season, swiperRef);
+
+  // 착용샷 클릭 시 착용샷 상세 페이지로 이동
+  const handleImageClick = (item) => {
+    navigate(`/lookbook/${item.id}`);
+  };
+
+  // 스와이퍼 네비게이션 버튼
   const goNext = () => {
     swiperRef.current.swiper.slideNext();
   };
@@ -115,14 +118,6 @@ function LookbookPage() {
   const goPrev = () => {
     swiperRef.current.swiper.slidePrev();
   };
-
-  // 착용샷 클릭 시 착용샷 상세 페이지로 이동 ------
-  const handleImageClick = (item) => {
-    navigate(`/lookbook/${item.id}`);
-  };
-
-  // 새로고침
-  const { handleRefresh } = useRefresh(lookBookItems, setLookBookItems, season, swiperRef);
 
   return isDetailPage ? (
     <Outlet />
@@ -171,42 +166,17 @@ function LookbookPage() {
         </div>
 
         <div className={styles.outfitSwiper}>
-          <Swiper
-            className={styles.swiper}
-            modules={[Pagination, Scrollbar, A11y, Keyboard]}
-            spaceBetween={20}
-            slidesPerView={1.2}
-            loop={lookBookItems.length > 1}
-            keyboard={{ enabled: true }}
-            pagination={{ clickable: true }}
-            a11y={{
-              prevSlideMessage: '이전 슬라이드',
-              nextSlideMessage: '다음 슬라이드',
-              paginationBulletMessage: '페이지 {{index}}',
-            }}
-            ref={swiperRef}
-          >
-            {lookBookItems.length > 0 ? (
-              lookBookItems.map((item) => (
-                <SwiperSlide key={item.id}>
-                  <NavLink to={`/lookbook/${item.id}`}>
-                    <img
-                      src={getPbImageURL(item, 'outfitImage')}
-                      alt={item.lookBookTitle}
-                      className={styles.outfitImage}
-                      onClick={() => handleImageClick(item)}
-                    />
-                  </NavLink>
-                </SwiperSlide>
-              ))
-            ) : (
-              <SwiperSlide>계절에 맞는 착용샷이 없습니다.</SwiperSlide>
-            )}
-          </Swiper>
+          <Suspense fallback={<div style={{ padding: 16 }}>룩북 페이지 로딩 중…</div>}>
+            <LookBookSwiper
+              swiperRef={swiperRef}
+              lookBookItems={lookBookItems}
+              handleImageClick={handleImageClick}
+            />
+          </Suspense>
         </div>
       </div>
     </>
   );
 }
 
-export default LookbookPage;
+export default LookBookPage;
