@@ -1,4 +1,4 @@
-import styles from './../../styles/pages/Lookbookpage.module.scss';
+import styles from './../../styles/pages/LookBookpage.module.scss';
 import Button from './../../components/Button/Button';
 import { IoRefreshSharp } from 'react-icons/io5';
 
