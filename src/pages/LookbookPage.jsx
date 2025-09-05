@@ -141,39 +141,53 @@ function LookBookPage() {
       </Helmet>
 
       <div className={styles.wrapComponent}>
-        <div className={styles.topWrapper}>
-          <h2 className={styles.title}>Look Book : OOTD</h2>
+        <header className={styles.topWrapper}>
+          <h1 className={styles.title}>Look Book : OOTD</h1>
 
           <RefreshButton onRefresh={handleRefresh} />
-        </div>
+        </header>
 
-        <WeatherIcon weatherIcon={weatherIcon} />
+        <main>
+          <WeatherIcon weatherIcon={weatherIcon} />
 
-        <div className={styles.subTitle}>
-          <p className={styles.description}>
-            오늘 날씨엔 <br />
-            이런 스타일 어때요?
-          </p>
+          <div className={styles.subTitle}>
+            <p className={styles.description}>
+              오늘 날씨엔 <br />
+              이런 스타일 어때요?
+            </p>
 
-          <div className={styles.swiperBtn}>
-            <button className={styles.goPrev} type="button" onClick={goPrev}>
-              <GoChevronLeft />
-            </button>
-            <button className={styles.goNext} type="button" onClick={goNext}>
-              <GoChevronRight />
-            </button>
+            <div className={styles.swiperBtn}>
+              <button
+                className={styles.goPrev}
+                type="button"
+                onClick={goPrev}
+                aria-label="이전 룩북 보기"
+                title="이전 룩북 보기"
+              >
+                <GoChevronLeft aria-hidden="true" />
+              </button>
+              <button
+                className={styles.goNext}
+                type="button"
+                onClick={goNext}
+                aria-label="다음 룩북 보기"
+                title="다음 룩북 보기"
+              >
+                <GoChevronRight aria-hidden="true" />
+              </button>
+            </div>
           </div>
-        </div>
 
-        <div className={styles.outfitSwiper}>
-          <Suspense fallback={<div style={{ padding: 16 }}>룩북 페이지 로딩 중…</div>}>
-            <LookBookSwiper
-              swiperRef={swiperRef}
-              lookBookItems={lookBookItems}
-              handleImageClick={handleImageClick}
-            />
-          </Suspense>
-        </div>
+          <div className={styles.outfitSwiper}>
+            <Suspense fallback={<div style={{ padding: 16 }}>룩북 페이지 로딩 중…</div>}>
+              <LookBookSwiper
+                swiperRef={swiperRef}
+                lookBookItems={lookBookItems}
+                handleImageClick={handleImageClick}
+              />
+            </Suspense>
+          </div>
+        </main>
       </div>
     </>
   );

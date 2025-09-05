@@ -6,6 +6,9 @@ export function RefreshButton({ onRefresh }) {
   return (
     <div className={styles.refreshBtn}>
       <Button
+        type="button"
+        aria-label="추천 코디 새로고침"
+        title="추천 코디 새로고침"
         icon={<IoRefreshSharp />}
         active={true}
         onClick={onRefresh}
