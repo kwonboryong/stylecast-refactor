@@ -9,7 +9,7 @@ export function RefreshButton({ onRefresh }) {
         type="button"
         aria-label="추천 코디 새로고침"
         title="추천 코디 새로고침"
-        icon={<IoRefreshSharp />}
+        icon={<IoRefreshSharp aria-hidden="true" />}
         active={true}
         onClick={onRefresh}
         style={{
