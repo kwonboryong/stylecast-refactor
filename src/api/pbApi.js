@@ -1,3 +1,13 @@
+import pb from './../api/pocketbase';
+
+pb.authStore.save = (model, token) => {
+  const authData = { model, token };
+
+  sessionStorage.setItem('pb_auth', JSON.stringify(authData));
+  localStorage.setItem('pb_auth', JSON.stringify(authData));
+};
+
+
 // ****************임시****************//
 
 // import PocketBase from 'pocketbase';
