@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { getWeatherIcon } from '../utils/weatherIcons';
 
-export function useWeatherData() {
+export function useWeatherIcon() {
   const weatherIcon = useMemo(() => {
     let weatherData = null;
 
