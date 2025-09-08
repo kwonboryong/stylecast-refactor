@@ -122,7 +122,7 @@ function LoginPage() {
         <meta property="og:image" content="https://stylecast.netlify.app/image/og-sc.png" />
         <meta property="og:url" content="https://stylecast.netlify.app/" />
         <meta property="og:site:author" content="TopTen" />
-        <link rel="canonical" href="https://stylecast.netlify.app/" />
+        <link rel="canonical" href="https://stylecast.netlify.app/login" />
       </Helmet>
 
       <div className="wrapComponent">
