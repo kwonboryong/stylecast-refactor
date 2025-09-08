@@ -7,7 +7,7 @@ import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
 import { WeatherIcon } from '../components/LookBook/WeatherIcon';
 import { RefreshButton } from '../components/LookBook/RefreshButton';
 import { useSeason } from '../hooks/useSeason';
-import { useWeatherIcon } from './../hooks/useWeatherIcon';
+import { useWeatherIcon } from '../hooks/useWeatherIcon';
 import { useRefresh } from '../hooks/useRefresh';
 
 const LookBookSwiper = lazy(() => import('@/components/LookBook/LookBookSwiper'));
