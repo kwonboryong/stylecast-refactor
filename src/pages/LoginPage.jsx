@@ -102,9 +102,9 @@ function LoginPage() {
     }
   };
 
-  const toggleShowPassword = useCallback(() => {
+  const toggleShowPassword = () => {
     dispatch({ type: 'TOGGLE_PASSWORD' });
-  }, [dispatch]);
+  };
 
   useEffect(() => {
     const token = getAuthToken();
