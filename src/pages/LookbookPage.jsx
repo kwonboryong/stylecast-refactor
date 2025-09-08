@@ -116,7 +116,7 @@ function LookBookPage() {
         <meta property="og:image" content="https://stylecast.netlify.app/image/og-sc.png" />
         <meta property="og:url" content="https://stylecast.netlify.app/" />
         <meta property="og:site:author" content="TopTen" />
-        <link rel="canonical" href="https://stylecast.netlify.app/" />
+        <link rel="canonical" href="https://stylecast.netlify.app/lookbook" />
       </Helmet>
 
       <div className={styles.wrapComponent}>
@@ -158,7 +158,13 @@ function LookBookPage() {
           </div>
 
           <div className={styles.outfitSwiper}>
-            <Suspense fallback={<div style={{ padding: 16 }}>룩북 페이지 로딩 중…</div>}>
+            <Suspense
+              fallback={
+                <div aria-live="polite" style={{ padding: 16 }}>
+                  룩북 페이지 로딩 중…
+                </div>
+              }
+            >
               <LookBookSwiper
                 swiperRef={swiperRef}
                 lookBookItems={lookBookItems}
