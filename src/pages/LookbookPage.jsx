@@ -4,21 +4,20 @@ import styles from './../styles/pages/LookBookpage.module.scss';
 import pb from '../api/pocketbase';
 import { Helmet } from 'react-helmet-async';
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
-
-import { useSeason } from '../hooks/useSeason';
 import { WeatherIcon } from '../components/LookBook/WeatherIcon';
 import { RefreshButton } from '../components/LookBook/RefreshButton';
+import { useSeason } from '../hooks/useSeason';
+import { useWeatherIcon } from './../hooks/useWeatherIcon';
 import { useRefresh } from '../hooks/useRefresh';
 
 const LookBookSwiper = lazy(() => import('@/components/LookBook/LookBookSwiper'));
-import { useWeatherData } from './../hooks/useWeatherData';
 
 function LookBookPage() {
   const navigate = useNavigate();
   const swiperRef = useRef(null);
 
   // 날씨 아이콘
-  const weatherIcon = useWeatherData();
+  const weatherIcon = useWeatherIcon();
 
   // 계절 판별
   const season = useSeason();
