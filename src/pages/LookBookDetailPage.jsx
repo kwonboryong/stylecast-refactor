@@ -57,10 +57,16 @@ function LookBookDetailPage() {
 
       <div className={styles.wrapComponent}>
         <div className={styles.topWrapper}>
-          <button className={styles.goPrev} type="button" onClick={() => navigate(-1)}>
+          <button
+            className={styles.goPrev}
+            type="button"
+            aria-label="뒤로가기"
+            title="뒤로가기"
+            onClick={() => navigate(-1)}
+          >
             <GoChevronLeft />
           </button>
-          <h2 className={styles.title}>Outfit of the Day </h2>
+          <h1 className={styles.title}>Outfit of the Day </h1>
         </div>
 
         <div className={styles.weatherIcon}>
