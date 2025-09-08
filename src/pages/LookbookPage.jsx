@@ -5,7 +5,7 @@ import pb from '../api/pocketbase';
 import { Helmet } from 'react-helmet-async';
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
 import { getWeatherIcon } from '../utils/weatherIcons';
-import { getSeason } from '../data/constant';
+import { useSeason } from '../hooks/useSeason';
 import { WeatherIcon } from '../components/LookBook/WeatherIcon';
 import { RefreshButton } from '../components/LookBook/RefreshButton';
 import { useRefresh } from '../hooks/useRefresh';
@@ -21,6 +21,9 @@ function LookBookPage() {
   const skyCondition = weatherData ? weatherData.skyCondition : '';
   const weatherIcon = getWeatherIcon(skyCondition);
 
+  // 계절 판별
+  const season = useSeason();
+
   // 전체 착용샷
   const [lookBookItems, setLookBookItems] = useState([]);
 
@@ -31,28 +34,6 @@ function LookBookPage() {
   // - 룩북p / 룩북 상세p 구분을 위함
   const location = useLocation();
   const isDetailPage = location.pathname.startsWith('/lookbook/');
-
-  // 기온 ------------------------------------
-  const temperatureStr = localStorage.getItem('temperature');
-  const temperature = parseInt(temperatureStr, 10) || 20;
-
-  // 월
-  let month;
-
-  const lastAccessTime = localStorage.getItem('lastAccessTime');
-
-  if (lastAccessTime) {
-    const monthStr = lastAccessTime.split('.')[1];
-    month = parseInt(monthStr, 10);
-  } else {
-    console.error('lastAccessTime 값이 없습니다.');
-    month = new Date().getMonth() + 1; // 현재 월로 설정
-  }
-
-  // 계절 판별
-  const season = getSeason(month, temperature);
-
-  console.log('현재 계절은 ' + season + '입니다.');
 
   useEffect(() => {
     const fetchLookBookItems = async () => {
