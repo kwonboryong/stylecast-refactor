@@ -1,6 +1,5 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { Input, Button, Form } from '@/components';
-import pb from './../api/pocketbase';
 import { Helmet } from 'react-helmet-async';
 import styles from '@/styles/pages/Login.module.scss';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -8,13 +7,6 @@ import { validatePassword, validateEmail } from './../api/validation';
 import useUserStore from '@/stores/userStore';
 import { useLoginForm } from './../hooks/useLoginForm';
 import { getAuthToken } from '@/utils/getAuthToken';
-
-pb.authStore.save = (model, token) => {
-  const authData = { model, token };
-
-  sessionStorage.setItem('pb_auth', JSON.stringify(authData));
-  localStorage.setItem('pb_auth', JSON.stringify(authData));
-};
 
 function LoginPage() {
   const { login } = useUserStore();
