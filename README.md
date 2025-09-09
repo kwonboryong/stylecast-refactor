@@ -1,14 +1,19 @@
-<br/>
-
-## ⛅ StyleCast – Refactor Edition
+# ⛅ StyleCast – Refactor Edition
 
 로그인·룩북·룩북 상세 핵심 리팩토링 기록 <br/>
-2025.09.04 - 09.09
 
 ### 목적
 
 - 팀 프로젝트 원본을 포크한 뒤, 내가 담당했던 페이지의 성능·접근성·안정성·보안 관점 리팩토링 결과를 정리한다.
 - 리팩토링 내역과 Before/After 근거를 남긴다.
+
+<br/>
+
+### 기간
+
+2025.09.04 - 09.09
+
+<br/>
 
 ### 담당 범위
 
@@ -16,11 +21,15 @@
 - 룩북 페이지
 - 룩북 상세 페이지
 
+<br/>
+
 ### 기술 스택
 
 - React, React Router, Vite, SCSS, PocketBase
 - 접근성/품질 점검: Lighthouse, axe DevTools
 - 상태/성능: useReducer, useCallback, React.lazy, Suspense, Custom Hooks
+
+<br/>
 
 ### 측정 기준
 
@@ -90,13 +99,19 @@
 
 - 스와이퍼 지연 로딩(React.lazy+Suspense)로 초기 번들 부담 완화, Above-the-fold 텍스트·버튼 우선 페인트
 
+<br/>
+
 **Lighthouse Accessibility: 89 → 96 (+7)**
 
 - 아이콘 버튼 aria-label/title, aria-live 로딩 알림, 아이콘 aria-hidden 적용
 
+<br/>
+
 **axe DevTools Critical: 3건 → 0건**
 
 - Accessible Name 누락 해결(아이콘 버튼 라벨), 나머지 Color Contrast는 디자인 협의 과제로 분리
+
+<br/>
 
 ---
 
