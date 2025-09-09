@@ -108,7 +108,7 @@
 **Lighthouse Accessibility: 89 → 96 (+7)**
 
 - 아이콘 버튼 aria-label/title, aria-live 로딩 알림, 아이콘 aria-hidden 적용
-  <img src="https://github.com/user-attachments/assets/ea249225-ad1a-4011-b9e7-42d578221886" alt="룩북 스크린샷 A" width="900">
+  <img width="900" alt="룩북 - 접근성 lighthouse 개선" src="https://github.com/user-attachments/assets/fabe301e-a0d9-4867-a880-2e7cd96b2db4" />
 
 <br/>
 
