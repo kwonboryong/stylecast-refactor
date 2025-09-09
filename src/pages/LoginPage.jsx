@@ -1,6 +1,5 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { Input, Button, Form } from '@/components';
-import pb from './../api/pocketbase';
 import { Helmet } from 'react-helmet-async';
 import styles from '@/styles/pages/Login.module.scss';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -8,13 +7,6 @@ import { validatePassword, validateEmail } from './../api/validation';
 import useUserStore from '@/stores/userStore';
 import { useLoginForm } from './../hooks/useLoginForm';
 import { getAuthToken } from '@/utils/getAuthToken';
-
-pb.authStore.save = (model, token) => {
-  const authData = { model, token };
-
-  sessionStorage.setItem('pb_auth', JSON.stringify(authData));
-  localStorage.setItem('pb_auth', JSON.stringify(authData));
-};
 
 function LoginPage() {
   const { login } = useUserStore();
@@ -39,22 +31,31 @@ function LoginPage() {
     [dispatch]
   );
 
-  const handleBlur = (e) => {
-    const { name, value } = e.target;
+  const handleBlur = useCallback(
+    (e) => {
+      const { name, value } = e.target;
 
-    if (name === 'email' && !validateEmail(value)) {
-      dispatch({ type: 'SET_WARNING', payload: { email: '유효한 이메일 주소를 입력하세요.' } });
-    } else if (name === 'password' && !validatePassword(value)) {
-      dispatch({
-        type: 'SET_WARNING',
-        payload: {
-          password: '비밀번호는 영문자, 숫자, 특수문자를 포함하여 최소 8자 이상 입력해야 합니다.',
-        },
-      });
-    } else {
-      dispatch({ type: 'SET_WARNING', payload: { [name]: '' } });
-    }
-  };
+      if (name === 'email' && !validateEmail(value)) {
+        dispatch({
+          type: 'SET_WARNING',
+          payload: { email: '유효한 이메일 주소를 입력하세요.' },
+        });
+      } else if (name === 'password' && !validatePassword(value)) {
+        dispatch({
+          type: 'SET_WARNING',
+          payload: {
+            password: '비밀번호는 영문자, 숫자, 특수문자를 포함하여 최소 8자 이상 입력해야 합니다.',
+          },
+        });
+      } else {
+        dispatch({
+          type: 'SET_WARNING',
+          payload: { [name]: '' },
+        });
+      }
+    },
+    [dispatch]
+  );
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -64,14 +65,20 @@ function LoginPage() {
     if (!state.email) {
       emailRef.current.focus();
 
-      dispatch({ type: 'SET_WARNING', payload: { email: '이메일을 입력하세요.' } });
+      dispatch({
+        type: 'SET_WARNING',
+        payload: { email: '이메일을 입력하세요.' },
+      });
       return;
     }
 
     if (!state.password) {
       passwordRef.current.focus();
 
-      dispatch({ type: 'SET_WARNING', payload: { password: '비밀번호를 입력하세요.' } });
+      dispatch({
+        type: 'SET_WARNING',
+        payload: { password: '비밀번호를 입력하세요.' },
+      });
       return;
     }
 
@@ -86,16 +93,17 @@ function LoginPage() {
     } catch (error) {
       console.error('로그인 실패:', error);
 
-      dispatch({ type: 'SET_WARNING', payload: { auth: '이메일 또는 비밀번호를 확인해주세요.' } });
+      dispatch({
+        type: 'SET_WARNING',
+        payload: { auth: '이메일 또는 비밀번호를 확인해주세요.' },
+      });
     } finally {
       dispatch({ type: 'SET_SUBMITTING', payload: false });
     }
   };
 
   const toggleShowPassword = () => {
-    dispatch({
-      type: 'TOGGLE_PASSWORD',
-    });
+    dispatch({ type: 'TOGGLE_PASSWORD' });
   };
 
   useEffect(() => {
@@ -122,7 +130,7 @@ function LoginPage() {
         <meta property="og:image" content="https://stylecast.netlify.app/image/og-sc.png" />
         <meta property="og:url" content="https://stylecast.netlify.app/" />
         <meta property="og:site:author" content="TopTen" />
-        <link rel="canonical" href="https://stylecast.netlify.app/" />
+        <link rel="canonical" href="https://stylecast.netlify.app/login" />
       </Helmet>
 
       <div className="wrapComponent">

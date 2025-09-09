@@ -5,16 +5,15 @@ import styles from './../styles/pages/LookbookDetailPage.module.scss';
 import pb from './../api/pocketbase';
 import LookBook from './../components/Main/LookBook';
 import { GoChevronLeft } from 'react-icons/go';
-import { getWeatherIcon } from './../utils/weatherIcons';
+import { useWeatherIcon } from './../hooks/useWeatherIcon';
+import { WeatherIcon } from './../components/LookBook/WeatherIcon';
 
 function LookBookDetailPage() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  // 날씨 아이콘
-  const weatherData = JSON.parse(localStorage.getItem('weatherData'));
-  const skyCondition = weatherData ? weatherData.skyCondition : '';
-  
+  const weatherIcon = useWeatherIcon();
+
   // 룩북 페이지에서 클릭된 착용샷
   const [item, setItem] = useState(null);
 
@@ -25,7 +24,6 @@ function LookBookDetailPage() {
           const fetchedItem = await pb.collection('lookBook').getOne(id);
 
           setItem(fetchedItem);
-          
         } catch (error) {
           console.error('상세페이지 데이터 중 에러', error);
         }
@@ -59,14 +57,20 @@ function LookBookDetailPage() {
 
       <div className={styles.wrapComponent}>
         <div className={styles.topWrapper}>
-          <button className={styles.goPrev} type="button" onClick={() => navigate(-1)}>
+          <button
+            className={styles.goPrev}
+            type="button"
+            aria-label="뒤로가기"
+            title="뒤로가기"
+            onClick={() => navigate(-1)}
+          >
             <GoChevronLeft />
           </button>
-          <h2 className={styles.title}>Outfit of the Day </h2>
+          <h1 className={styles.title}>Outfit of the Day </h1>
         </div>
 
         <div className={styles.weatherIcon}>
-          <img src={getWeatherIcon(skyCondition).src} alt={getWeatherIcon(skyCondition).alt} />
+          <WeatherIcon weatherIcon={weatherIcon} />
         </div>
 
         <div className={styles.subTitle}>

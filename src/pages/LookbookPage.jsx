@@ -4,10 +4,10 @@ import styles from './../styles/pages/LookBookpage.module.scss';
 import pb from '../api/pocketbase';
 import { Helmet } from 'react-helmet-async';
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
-import { getWeatherIcon } from '../utils/weatherIcons';
-import { getSeason } from '../data/constant';
 import { WeatherIcon } from '../components/LookBook/WeatherIcon';
 import { RefreshButton } from '../components/LookBook/RefreshButton';
+import { useSeason } from '../hooks/useSeason';
+import { useWeatherIcon } from '../hooks/useWeatherIcon';
 import { useRefresh } from '../hooks/useRefresh';
 
 const LookBookSwiper = lazy(() => import('@/components/LookBook/LookBookSwiper'));
@@ -17,9 +17,10 @@ function LookBookPage() {
   const swiperRef = useRef(null);
 
   // 날씨 아이콘
-  const weatherData = JSON.parse(localStorage.getItem('weatherData'));
-  const skyCondition = weatherData ? weatherData.skyCondition : '';
-  const weatherIcon = getWeatherIcon(skyCondition);
+  const weatherIcon = useWeatherIcon();
+
+  // 계절 판별
+  const season = useSeason();
 
   // 전체 착용샷
   const [lookBookItems, setLookBookItems] = useState([]);
@@ -31,28 +32,6 @@ function LookBookPage() {
   // - 룩북p / 룩북 상세p 구분을 위함
   const location = useLocation();
   const isDetailPage = location.pathname.startsWith('/lookbook/');
-
-  // 기온 ------------------------------------
-  const temperatureStr = localStorage.getItem('temperature');
-  const temperature = parseInt(temperatureStr, 10) || 20;
-
-  // 월
-  let month;
-
-  const lastAccessTime = localStorage.getItem('lastAccessTime');
-
-  if (lastAccessTime) {
-    const monthStr = lastAccessTime.split('.')[1];
-    month = parseInt(monthStr, 10);
-  } else {
-    console.error('lastAccessTime 값이 없습니다.');
-    month = new Date().getMonth() + 1; // 현재 월로 설정
-  }
-
-  // 계절 판별
-  const season = getSeason(month, temperature);
-
-  console.log('현재 계절은 ' + season + '입니다.');
 
   useEffect(() => {
     const fetchLookBookItems = async () => {
@@ -88,7 +67,7 @@ function LookBookPage() {
         // 전체 챡용샷 - 업데이트
         setLookBookItems([...seasonItems, ...allSeasonItems]);
 
-        // 전체 착용샷 - 세션에 저장 --------------------------
+        // 전체 착용샷 - 세션에 저장
         // - 상세 페이지에서 돌아올 시 착용샷 유지를 위함
         sessionStorage.setItem(
           'lookBookItems',
@@ -105,7 +84,7 @@ function LookBookPage() {
   // 새로고침
   const { handleRefresh } = useRefresh(lookBookItems, setLookBookItems, season, swiperRef);
 
-  // 착용샷 클릭 시 착용샷 상세 페이지로 이동
+  // 착용샷 클릭 시 상세 페이지로 이동
   const handleImageClick = (item) => {
     navigate(`/lookbook/${item.id}`);
   };
@@ -137,7 +116,7 @@ function LookBookPage() {
         <meta property="og:image" content="https://stylecast.netlify.app/image/og-sc.png" />
         <meta property="og:url" content="https://stylecast.netlify.app/" />
         <meta property="og:site:author" content="TopTen" />
-        <link rel="canonical" href="https://stylecast.netlify.app/" />
+        <link rel="canonical" href="https://stylecast.netlify.app/lookbook" />
       </Helmet>
 
       <div className={styles.wrapComponent}>
@@ -179,7 +158,13 @@ function LookBookPage() {
           </div>
 
           <div className={styles.outfitSwiper}>
-            <Suspense fallback={<div style={{ padding: 16 }}>룩북 페이지 로딩 중…</div>}>
+            <Suspense
+              fallback={
+                <div aria-live="polite" style={{ padding: 16 }}>
+                  룩북 페이지 로딩 중…
+                </div>
+              }
+            >
               <LookBookSwiper
                 swiperRef={swiperRef}
                 lookBookItems={lookBookItems}
