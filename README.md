@@ -1,116 +1,155 @@
-
 <br/>
 
-# ⛅ Style Cast ☔
-**날씨 기반 오늘의 옷(OOTD) 추천 애플리케이션**
+## ⛅ StyleCast – Refactor Edition
 
-<a href="https://stylecast.netlify.app/">
-  <img src="https://github.com/user-attachments/assets/43cfbf52-48d0-47a4-b0ad-e0eb4e281401" alt="스타일 캐스트 로고 gif" />
-</a>
+로그인·룩북·룩북 상세 핵심 리팩토링 기록 <br/>
+2025.09.04 - 09.09
 
-<br/>
+### 목적
 
-### 👩‍🚀 Members 🧑‍🚀
+- 팀 프로젝트 원본을 포크한 뒤, 내가 담당했던 페이지의 성능·접근성·안정성·보안 관점 리팩토링 결과를 정리한다.
+- 리팩토링 내역과 Before/After 근거를 남긴다.
 
-|     곽승헌     |     권보령     |     함정민     |     황선우     |
-|:--------------:|:--------------:|:--------------:|:--------------:|
-| <img src="https://github.com/user-attachments/assets/60c1f364-0639-48f2-ae15-0ad942755318" width="200" height="200" /> <br/> **조장** <br/> (Team Master) | <img src="https://github.com/user-attachments/assets/65b7d205-c0f6-4d82-908e-22c850c7e36c"  width="140" height="200" /> <br/> **문서 기록 마스터** <br/> (Notion, github Wiki) | <img src="https://github.com/user-attachments/assets/6683edd3-811f-4f4c-abea-c2787d93ae0e" width="200" height="200" /> <br/> **디자인 마스터** <br/> (Design Master) | <img src="https://github.com/user-attachments/assets/4ad0a3c7-ede1-4c28-ab61-f481702ec757" width="160" height="200" /> <br/> **스크럼 마스터** <br/> (Scrum Master) |
-|       INTP      |       ISTJ      |       ENFP      |       INTJ      |
-| [Github](https://github.com/nada77777) | [Github](https://github.com/kwonboryong) | [Github](https://github.com/hammadam) | [Github](https://github.com/EraMorgett4) |
+### 담당 범위
 
-<br/><br/>
-
-### 목차
-1. [프로젝트 소개](#01-프로젝트-소개-)
-2. [구현 기능](#02-구현-기능-)
-3. [문서](#03-문서-)
-
-<br/><br/>
-
----
-
-<br/>
-
-## 01. 프로젝트 소개 📝
-
-###  [스타일 캐스트(Style Cast) 프로젝트](https://stylecast.netlify.app/)
-<img src="https://github.com/user-attachments/assets/0b1a9540-1404-4745-8c00-1b9e4cbc9e97" alt="인트로 페이지" width="800" height="500">
-
-### 기간
-2024.08.26 ~ 09.24
-
-<br/>
-
-### 프로젝트 소개
-기온만으로는 적절한 옷차림을 결정하기 어려운 경우가 많습니다. <br/>
-이 애플리케이션은 당일 날씨와 기온에 따라 적합한 옷차림(Outfit of the Day, OOTD)을 추천받을 수 있도록 설계되었습니다. <br/>
-이를 통해 사용자에게 보다 정확하고 실용적인 옷차림 정보를 제공하고, 일상에서의 편리함을 더하고자 합니다. <br/>
-
-<br/><br/>
-
-### 프로젝트 목적
-1. 날씨에 따른 적절한 옷차림 제공
-   - 사용자는 날씨에 맞는 옷차림을 선택하는 것이 종종 어려울 수 있습니다. 
-   - 이 애플리케이션은 현재 날씨를 기준으로 적절한 옷차림을 추천하여, 사용자들이 날씨에 맞는 옷을 손쉽게 고를 수 있도록 돕습니다.
-
-2. 패션 선택의 다양성 제공
-   - 매일 새로운 OOTD를 제안하여 사용자들에게 다양한 스타일의 패션 선택을 제공합니다. 
-   - 이를 통해 사용자들이 패션을 더 즐기고 창의적인 스타일을 시도할 수 있도록 유도합니다.
-
-3. 편리한 패션 관리
-   - 사용자에게 날씨 기반의 패션 추천을 제공함으로써, 매일 아침 무엇을 입을지 고민하는 시간을 줄이고, 패션 선택의 스트레스를 경감시킵니다.
-   - 마음에 드는 코디를 저장하여 원하는 패션을 관리할 수 있습니다. 
-
-4. 사용자 경험 개선
-   - 직관적이고 사용하기 쉬운 인터페이스를 통해 사용자들이 손쉽게 애플리케이션을 사용할 수 있도록 합니다.
-
-<br/><br/>
+- 로그인 페이지
+- 룩북 페이지
+- 룩북 상세 페이지
 
 ### 기술 스택
 
-| 카테고리  | 기술 및 도구  |
-|----------------|----------------------------|
-| **언어** | <img src="https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white"/> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"/> |
-| **라이브러리** | <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black"/> |
-| **상태 관리**  | <img src="https://img.shields.io/badge/Zustand-F4D03F?style=for-the-badge&logo=zustand&logoColor=black"/> |
-| **개발 도구**  | <img src="https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white"/> <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white"/> <img src="https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=black"/> <img src="https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white"/> |
-| **데이터 베이스**     | ![image](https://github.com/user-attachments/assets/09e6d9c9-db9a-4d72-a8d6-def080a4c630)  |
-| **배포**  | <img src="https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white"/> |
+- React, React Router, Vite, SCSS, PocketBase
+- 접근성/품질 점검: Lighthouse, axe DevTools
+- 상태/성능: useReducer, useCallback, React.lazy, Suspense, Custom Hooks
 
-<br/><br/>
+### 측정 기준
 
-### 배포
-
-<a href="https://stylecast.netlify.app/">
-  <img src="https://github.com/user-attachments/assets/acb3b092-16f5-4ad6-aa08-7df56d6f84de" alt="스타일 캐스트 배포 QR 이미지" />
-</a>
-
-<br/><br/>
-<br/>
-
-## 02. 구현 기능 ⚙
-<img src="https://github.com/user-attachments/assets/9768d1bb-b149-467b-b18f-abb13e4d572b" alt="메인 페이지" width="500" height="870">
+- Lighthouse: Performance / Accessibility / SEO
+- 핵심 웹 지표: CLS, LCP 등
+- axe DevTools: issue 수(Critical/Serious)
 
 <br/>
 
-- [기능 구현](https://github.com/FRONTENDSCHOOL10/Topten/wiki/%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84)
+---
 
-<br/><br/>
+## 핵심 변경 요약
+
+### 로그인(Login)
+
+- **상태 관리**
+  - useReducer 도입: 흩어져 있던 상태(email, password, showPassword, warnings, isSubmitting 등)를 하나의 리듀서로 통합
+  - useLoginForm 훅으로 분리해 컴포넌트 로직 단순화
+- **성능 최적화**
+  - 자식 컴포넌트로 내려가는 핸들러(handleEmailChange, handlePasswordChange, handleBlur)에만 useCallback 적용
+  - toggleShowPassword는 DOM 직결 이벤트로 이점이 적어 useCallback 제거
+- **리다이렉트 UX**
+  - getAuthToken 유틸로 인증 체크
+  - setTimeout 제거
+  - 로그인 상태면 즉시 navigate('/main', { replace: true })로 이동해 히스토리 문제 해결
+- **중복 제출 방지**
+  - isSubmitting 가드, try/finally 패턴으로 상태 복구 보장
+  - 버튼 disabled와 라벨(“로그인 중…”)로 사용자 피드백 제공
+  - 폼 aria-busy 적용
+
 <br/>
 
-## 03. 문서 🗂
-- [기획](https://github.com/FRONTENDSCHOOL10/Topten/wiki/%EA%B8%B0%ED%9A%8D%F0%9F%93%9D)
-- [디자인 및 기능](https://github.com/FRONTENDSCHOOL10/Topten/wiki/%EB%94%94%EC%9E%90%EC%9D%B8-%EB%B0%8F-%EA%B8%B0%EB%8A%A5%F0%9F%96%8C%EF%B8%8F)
-- [제품 백로그](https://github.com/FRONTENDSCHOOL10/Topten/wiki/%EC%A0%9C%ED%92%88-%EB%B0%B1%EB%A1%9C%EA%B7%B8%E2%9A%99%EF%B8%8F)
-- [DB 설계](https://github.com/FRONTENDSCHOOL10/Topten/wiki/DB-%EC%84%A4%EA%B3%84)
-- [트러블 슈팅](https://github.com/FRONTENDSCHOOL10/Topten/wiki/%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85-%F0%9F%A5%8A)
+### 룩북(LookBook)
+
+- **UI/로직 분리**
+  - WeatherIcon, RefreshButton 분리
+  - 새로고침 비즈니스 로직은 useRefresh 훅으로 이동(의존성 배열 관리 포함).
+- **계절 판별 훅**: useSeason 훅으로 월/기온→계절 로직을 분리
+- **코드 스플리팅**
+  - LookBookSwiper를 React.lazy + Suspense로 지연 로딩. 상단 텍스트/버튼은 먼저 표시, 스와이퍼는 뒤따라 로드
+  - Suspense fallback에 aria-live="polite"로 접근성 강화
+- **안전성**
+  - localStorage JSON.parse 가드
+  - Swiper ref 접근은 옵셔널 체이닝
+- **접근성 개선**: 아이콘 버튼에 aria-label과 title 부여, 아이콘은 aria-hidden 처리
 
 <br/>
 
-- [업무 분담](https://github.com/FRONTENDSCHOOL10/Topten/wiki/%EC%97%85%EB%AC%B4-%EB%B6%84%EB%8B%B4%F0%9F%A4%BC%E2%80%8D%E2%99%80%EF%B8%8F)
-- [컨벤션(Convention)](https://github.com/FRONTENDSCHOOL10/Topten/wiki/%EC%BB%A8%EB%B2%A4%EC%85%98(Convention))
-- [회의록](https://github.com/FRONTENDSCHOOL10/Topten/wiki/%ED%9A%8C%EC%9D%98%EB%A1%9D)
+### 룩북 상세(LookBook Detail)
 
+- **접근성/시맨틱**
+  - 버튼에 aria-label 및 title 속성 추가
+  - 페이지 헤딩을 h2 → h1로 수정
+- **구조 정리**
+  - 날씨 아이콘 로직을 커스텀 훅으로 분리
+  - 날씨 아이콘 전용 UI 컴포넌트 적용
+
+<br/>
+
+---
+
+## Before / After 지표
+
+(범위: 룩북 페이지)
+
+**Lighthouse Performance: 100 (유지)**
+
+- 스와이퍼 지연 로딩(React.lazy+Suspense)로 초기 번들 부담 완화, Above-the-fold 텍스트·버튼 우선 페인트
+
+**Lighthouse Accessibility: 89 → 96 (+7)**
+
+- 아이콘 버튼 aria-label/title, aria-live 로딩 알림, 아이콘 aria-hidden 적용
+
+**axe DevTools Critical: 3건 → 0건**
+
+- Accessible Name 누락 해결(아이콘 버튼 라벨), 나머지 Color Contrast는 디자인 협의 과제로 분리
+
+---
+
+### Changelog
+
+- 2025-09-08
+  - Merged
+    - PR #4: 룩북/상세/로그인 전반 리팩토링(커스텀 훅 분리, 성능 최적화, 접근성 개선)
+  - Changed
+    - \[login] handleBlur, toggleShowPassword에 useCallback 적용 후, toggleShowPassword는 DOM 직결 이벤트라 이점 미미하여 useCallback 제거
+    - \[login] pb.authStore.save 설정 코드 분리
+    - \[login] 로그인 페이지 Helmet 주소(메타/캐노니컬) 수정
+    - \[lookbook] 컴포넌트 파일명 PascalCase로 정리
+    - \[lookbook] 메타 링크를 /lookbook으로 수정, Suspense 로딩 영역에 aria-live 추가
+    - \[lookbook] 날씨 아이콘 로직 커스텀 훅 분리 및 useMemo 적용(파일명 변경에 따른 경로 업데이트 포함)
+    - \[lookbook] 계절 판별 로직을 커스텀 훅(useSeason)으로 분리
+    - \[lookbook-detail] 버튼 aria-label/title 추가, 페이지 헤딩 h2 → h1
+    - \[lookbook-detail] 날씨 아이콘 커스텀 훅 적용 및 전용 UI 컴포넌트 사용
+- 2025-09-05
+  - Merged
+    - PR #3: Refactor/lookbook
+  - Added
+    - \[lookbook] LookBookSwiper를 별도 컴포넌트로 분리
+  - Changed
+    - \[lookbook] 스와이퍼 첫 슬라이드 LCP 설정 → 후속 커밋에서 설정 제거(최종적으로 LCP 지정 해제)
+    - \[lookbook] 접근성 보강: 시맨틱 태그 적용, aria-label 추가, button type 명시
+    - \[lookbook] 아이콘 aria-hidden 추가(스크린리더 중복 읽기 방지)
+  - Fixed
+    - \[lookbook] 파일명 대문자 변경에 따른 경로 업데이트
+- 2025-09-04
+  - Merged
+    - PR #2: 로그인 페이지 최적화(입력 함수 useCallback, 즉시 리다이렉트, 중복 제출 방지)
+    - PR #1: 로그인 페이지 useState → useReducer 통합 & useLoginForm 훅 분리
+  - Added
+    - \[lookbook] 새로고침 버튼 UI 컴포넌트 분리
+    - \[lookbook] 날씨 아이콘 UI 컴포넌트 분리
+    - \[lookbook] 기존 새로고침 로직을 커스텀 훅(useRefresh)으로 분리
+  - Changed
+    - \[login] 인증 체크 로직 유틸로 분리(getAuthToken), navigate(..., { replace: true }) 적용
+    - \[login] 2초 지연 제거에 따라 redirecting 상태 및 조건부 렌더링 제거
+    - \[login] 로그인 관련 입력 핸들러에 useCallback 적용
+    - \[login] LoginPage의 기존 state들을 useReducer를 사용하여 정리 및 커스텀 훅으로 분리
+    - \[login] useLoginForm으로 커스텀 훅 분리로 인한 기존 state 및 set 함수 수정
+  - Updated
+    - \[infra] npm 업데이트
+
+<br/>
+
+### Credits
+
+본 리포지토리는 원본 StyleCast 팀 프로젝트를 바탕으로 리팩토링 내용을 정리한 저장소입니다. <br/>
+팀 프로젝트 소개/구현 내용은 원문 README를 참고해 주세요. <br/>
+StyleCast: https://github.com/FRONTENDSCHOOL10/Topten
 
 <br/><br/>
 <br/>
