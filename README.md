@@ -98,18 +98,24 @@
 **Lighthouse Performance: 100 (유지)**
 
 - 스와이퍼 지연 로딩(React.lazy+Suspense)로 초기 번들 부담 완화, Above-the-fold 텍스트·버튼 우선 페인트
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/08d4d867-8bb7-49cf-b482-094350581966" alt="룩북 퍼포먼스 점수" width="49%" />
+  <img src="https://github.com/user-attachments/assets/8a3144ac-4534-4f72-bdf3-d1daa7bacb68" alt="룩북 퍼포먼스 상세 점수" width="49%" />
+</p>
 
 <br/>
 
 **Lighthouse Accessibility: 89 → 96 (+7)**
 
 - 아이콘 버튼 aria-label/title, aria-live 로딩 알림, 아이콘 aria-hidden 적용
+  <img src="https://github.com/user-attachments/assets/ea249225-ad1a-4011-b9e7-42d578221886" alt="룩북 스크린샷 A" width="900">
 
 <br/>
 
 **axe DevTools Critical: 3건 → 0건**
 
 - Accessible Name 누락 해결(아이콘 버튼 라벨), 나머지 Color Contrast는 디자인 협의 과제로 분리
+  <img width="900" alt="룩북 - 접근성 axe 이슈 개선" src="https://github.com/user-attachments/assets/aa1e215f-6209-4954-ae6b-1ada62ee4a41" />
 
 <br/>
 
